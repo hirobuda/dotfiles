@@ -1,0 +1,225 @@
+[colors]
+background = #523874
+lightbackground = #584974
+background-transparent = #f2523874
+foreground = #dfdfdf
+selected = #8077a8
+red = #F92672
+darkred = #F92672
+traybackground = #A8757B
+yellow = #ffea00
+cyan = #c2ffdf
+orange = #dc7d68
+darkorange = #d65d0e
+green = #adf182
+purple = #916cad
+darkpurple = #a093c7
+lightblack = #f8f8f2
+lightblue  = #91acd1
+white  = #d2d4de
+
+[bar/mainbar0]
+modules-left = xmonad arrowleft1 memory cpu arrowleft2 playerctlstatus playerctlplaying arrowleft3 
+modules-center = xwindow
+;line-size = 2
+;line-color = ${colors.red}
+modules-right = arrowright2 date arrowright4 time arrowright5 pulseaudio
+height = 25
+offset-y = 0
+offset-x = 0
+width = 100%
+tray-offset-x = 0
+tray-position = right
+tray-background = ${colors.background}
+background = ${colors.background}
+foreground = ${colors.foreground}
+
+font-0 = "Fantasque Sans Mono:pixelsize=12;3"
+font-1 = "FontAwesome:size=15;2"
+font-2 = siji:pixelsize=15;3
+font-3 = "PowerlineSymbols:pixelsize=20:antialias=false;6"
+font-4 = "CozetteVector Nerd Font:style=Solid:pixelsize=15:antialias=false;3"
+font-5 = "CozetteVector Nerd Font:style=Solid:pixelsize=15:antialias=false;2"
+font-6 = "FiraCode Nerd Font:antialias=false:rgba=none:pixelsize=16;3"
+font-7 = "Symbols Nerd Font:style=1000-em:antialias=false:pixelsize=15;3"
+font-8 = "PowerlineSymbols:pixelsize=20:antialias=false;5"
+
+[module/xwindow]
+type = internal/xwindow
+label = %title:0:30:...%
+
+[module/xmonad]
+type = custom/script
+exec = xmonad-log
+tail = true
+format-prefix = "ﬦ"
+format-prefix-font = 6
+
+[module/playerctlstatus]
+type = custom/script
+label = " %output% "
+exec = ~/.config/polybar/polybar-scripts/playerctl-status -s
+format-background = ${colors.orange}
+format-foreground = ${colors.background}
+
+[module/playerctlplaying]
+type = custom/script
+exec = ~/.config/polybar/polybar-scripts/playerctl-status
+interval = 1
+label = "%output% "
+format-background = ${colors.orange}
+format-foreground = ${colors.background}
+
+[module/cpu]
+type = internal/cpu
+;format-prefix = ""
+format-prefix = ""
+format-prefix-font = 6
+label = "%percentage%% "
+format-background = ${colors.green}
+format-foreground = ${colors.background}
+; Seconds to sleep between updates
+; Default: 1
+interval = 0.5
+
+[module/memory]
+type = internal/memory
+format-prefix = "  "
+format-prefix-font = 6
+;format-prefix-font = 2
+label = "%percentage_used%% "
+format-background = ${colors.green}
+format-foreground = ${colors.background}
+
+; Seconds to sleep between updates
+; Default: 1
+interval = 3
+
+[module/date]
+format-prefix = " "
+format-prefix-font = 5
+
+type = internal/date
+date = "%a %b %d, %Y "
+format-foreground = ${colors.background}
+format-background = ${colors.orange}
+
+[module/traypadding]
+type = custom/text
+content = "     "
+content-background = ${colors.background}
+
+[module/arrowleft1]
+type = custom/text
+content = ""
+content-font = 4
+content-background = ${colors.green}
+content-foreground = ${colors.background}
+content-offset = -5
+
+[module/arrowleft2]
+type = custom/text
+content = ""
+content-font = 4
+content-background = ${colors.orange}
+content-foreground = ${colors.green}
+content-offset = -1
+
+[module/arrowleft3]
+type = custom/text
+content = ""
+content-font = 4
+content-foreground = ${colors.orange}
+content-offset = -1
+
+[module/arrowright1]
+type = custom/text
+content = ""
+content-font = 4
+content-foreground = ${colors.purple}
+
+[module/arrowright2]
+type = custom/text
+content = ""
+;content-background = ${colors.selected}
+content-foreground = ${colors.orange}
+content-font = 4
+
+[module/arrowright3]
+type = custom/text
+content = ""
+content-font = 4
+content-background = ${colors.red}
+content-foreground = ${colors.background}
+
+[module/arrowright4]
+type = custom/text
+content = ""
+content-font = 4
+content-background = ${colors.orange}
+content-foreground = ${colors.green}
+
+[module/arrowright5]
+type = custom/text
+content = ""
+content-font = 4
+content-background = ${colors.green}
+content-foreground = ${colors.background}
+
+[module/arrowright6]
+type = custom/text
+content = ""
+content-font = 4
+content-background = ${colors.purple}
+content-foreground = ${colors.selected}
+
+[module/time]
+format-prefix = " "
+type = internal/date
+date = "%H:%M:%S "
+format-prefix-font = 5
+format-background = ${colors.green}
+format-foreground = ${colors.background}
+
+[module/windowtitle]
+type = internal/xwindow
+label = " %title% "
+;format-underline = ${colors.darkorange}
+format-foreground = ${colors.foreground}
+
+[module/ewmh]
+type = internal/xworkspaces
+
+enable-click = true
+enable-scroll = true
+
+label-active = " %name% "
+labelempty= ""
+label-occupied= " %name% "
+label-urgent= " %name% "
+
+
+label-active-background = ${colors.selected}
+label-active-underline = ${colors.purple}
+label-occupied-background = ${colors.background2}
+label-urgent-background = ${colors.red}
+
+[module/pulseaudio]
+type = internal/pulseaudio
+format-volume = <ramp-volume><label-volume>
+label-volume = "%percentage%% "
+label-muted = " "
+ramp-volume-0 = " "
+;ramp-volume-1 = " "
+ramp-volume-1 = " "
+ramp-volume-2 = " "
+label-muted-font = 8
+ramp-volume-font = 8
+click-right = pavucontrol
+label-volume-background = ${colors.background}
+label-volume-foreground = ${colors.green}
+label-muted-background = ${colors.background}
+label-muted-foreground = ${colors.green}
+ramp-volume-background = ${colors.background}
+ramp-volume-foreground = ${colors.orange}-
+; vim:ft=dosini
