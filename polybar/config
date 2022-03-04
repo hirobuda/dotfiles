@@ -9,24 +9,24 @@ purple = #916cad
 [bar/mainbar0]
 modules-left = left-triangle xmonad separator memory cpu battery separator playerctlstatus playerctlplaying right-triangle
 modules-center = left-triangle date separator time right-triangle
-modules-right = left-triangle pulseaudio traypadding right-triangle
-height = 30
+modules-right = left-triangle pulseaudio separator traypadding right-triangle
+height = 27
 offset-y = 3
 offset-x = 0
 width = 100%
 
-tray-offset-x = -10
-tray-position = right
+tray-offset-x = 625
+tray-position = center
 tray-background = ${colors.background}
 tray-detached = true
 
 background = ${colors.transparent}
 foreground = ${colors.foreground}
 
-font-0 = "mononoki:style=Bold:pixelsize=15;3"
-font-1 = "SauceCodePro Nerd Font Mono:style=Regular:size=20;4"
-font-2 = "SauceCodePro Nerd Font Mono:style=Regular:pixelsize=15;3"
-
+font-0 = "mononoki:style=Regular:pixelsize=13;3"
+font-1 = "SauceCodePro Nerd Font Mono:style=Regular:size=17;4"
+font-2 = "SauceCodePro Nerd Font Mono:style=Regular:pixelsize=13;3"
+font-3 = "SauceCodePro Nerd Font Mono:style=Regular:pixelsize=13;2"
 override-redirect = true
 
 [module/xwindow]
@@ -53,7 +53,7 @@ poll-interval = 2
 [module/separator]
 type = custom/text
 content = |
-content-font = 3
+content-font = 4
 content-foreground = ${colors.purple}
 content-background = ${colors.background}
 
@@ -118,7 +118,7 @@ format-background = ${colors.background}
 
 [module/traypadding]
 type = custom/text
-content = "       "
+content = "           "
 content-background = ${colors.background}
 
 [module/time]
