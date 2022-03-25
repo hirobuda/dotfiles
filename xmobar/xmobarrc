@@ -1,0 +1,20 @@
+Config { overrideRedirect = False
+       , font     = "xft:Mononoki:size=14"
+       , additionalFonts  = [ "xft:SauceCodePro Nerd Font Mono:style=Bold:pixelsize=17"
+       			    , "xft:SauceCodePro Nerd Font Mono:style=Bold:pixelsize=23:1"
+			    , "xft:Source Han Sans JP Normal:pixelsize=17"
+			    ]
+       , bgColor  = "#3e4451"
+       , fgColor  = "#bbc2cf"
+       , position = TopW L 100
+       , commands = [ Run Cpu ["-t", "<fc=#adf182><fn=2>\xf108</fn></fc> <total>%","-H","50","--high","red"] 20
+                    , Run Memory ["-t", "<fc=#916cad><fn=2>\xf233</fn></fc> <usedratio>%"] 20
+                    , Run Com "echo" ["<fn=1>\xfb26</fn>"] "lambda" 3600
+		    , Run Com "/home/hiroshi/.config/xmobar/trayer-padding-icon.sh" [] "trayerpad" 20
+		    , Run Date "<fc=#ff8c28><fn=2>\xf017</fn></fc> %a %Y-%m-%d <fc=#f6c026>%H:%M</fc>" "date" 10
+		    , Run XMonadLog
+                    ]
+       , sepChar  = "%"
+       , alignSep = "}{"
+       , template = " %lambda% %XMonadLog% }{ | %cpu% | %memory% | %date% | %trayerpad% "
+       }
