@@ -1,0 +1,14 @@
+
+xmonad.hs:8:1: error:
+    Could not find module ‘XMonad.Hooks.StatusBar’
+    Use -v (or `:set -v` in ghci) to see a list of the files searched for.
+  |
+8 | import XMonad.Hooks.StatusBar
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+xmonad.hs:9:1: error:
+    Could not find module ‘XMonad.Hooks.StatusBar.PP’
+    Use -v (or `:set -v` in ghci) to see a list of the files searched for.
+  |
+9 | import XMonad.Hooks.StatusBar.PP
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
