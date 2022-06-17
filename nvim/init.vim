@@ -8,29 +8,28 @@ endif
 " PLUGINS --------------------------------------------------------------
 call plug#begin('~/.config/nvim/plugged')
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install'  }
-Plug 'godlygeek/tabular'
 Plug 'elzr/vim-json'
-Plug 'plasticboy/vim-markdown'
-Plug 'vim-pandoc/vim-pandoc-syntax'
 Plug 'ms-jpq/coq_nvim', {'branch': 'coq'}
 Plug 'ms-jpq/coq.artifacts', {'branch': 'artifacts'}
-Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
-Plug 'ryanoasis/vim-devicons'
 Plug '907th/vim-auto-save'
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
-Plug 'neovim/nvim-lspconfig'
+Plug 'nvim-lualine/lualine.nvim'
+Plug 'kyazdani42/nvim-web-devicons'
+Plug 'neovim/nvim-lspconfig', { 'tag': 'v0.1.3' }
 Plug 'ap/vim-css-color'
 Plug 'lervag/vimtex'
 Plug 'kyazdani42/nvim-web-devicons' " for file icons
 Plug 'kyazdani42/nvim-tree.lua'
-Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+"Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'rrethy/vim-hexokinase', { 'do': 'make hexokinase' }
-Plug 'vimwiki/vimwiki'
+Plug 'godlygeek/tabular'
+Plug 'ixru/nvim-markdown'
 call plug#end()
 
 " set colorscheme
 colorscheme eva-01
+
+" set filetype plugin on
+filetype plugin on
 
 " vim-hexokinase
 let g:Hexokinase_highlighters = ['backgroundfull']
@@ -40,6 +39,8 @@ let g:mkdp_auto_close = 0
 " set to 1, nvim will open the preview window after entering the markdown buffer
 " default: 0
 let g:mkdp_auto_start = 0
+
+let g:vim_markdown_math = 0
 
 " vimtex
 let g:vimtex_view_method = 'zathura'
@@ -154,9 +155,9 @@ augroup pandoc_syntax
 augroup END
 
 " Airline
-let g:airline#extensions#ale#enabled = 1
-let g:airline_theme='dark'
-let g:airline_powerline_fonts = 1
+"let g:airline#extensions#ale#enabled = 1
+"let g:airline_theme='dark'
+"let g:airline_powerline_fonts = 1
 
 nnoremap <Leader>ht :GhcModType<cr>
 nnoremap <Leader>htc :GhcModTypeClear<cr>
@@ -170,10 +171,13 @@ let g:nvim_tree_highlight_opened_files = 1 "0 by default, will enable folder and
 let g:nvim_tree_root_folder_modifier = ':~' "This is the default. See :help filename-modifiers for more options
 let g:nvim_tree_add_trailing = 1 "0 by default, append a trailing slash to folder names
 let g:nvim_tree_group_empty = 1 " 0 by default, compact folders that only contain a single folder into one node in the file tree
-let g:nvim_tree_icon_padding = ' ' "one space by default, used for rendering the space between the icon and the filename. Use with caution, it could break rendering if you set an empty string depending on your font.
+let g:nvim_tree_icon_padding = ' ' 
+"one space by default, used for rendering the space between the icon and the filename 
+"use with caution, it could break rendering if you set an empty string depending on your font
 let g:nvim_tree_symlink_arrow = ' >> ' " defaults to ' ➛ '. used as a separator between symlinks' source and target.
 let g:nvim_tree_respect_buf_cwd = 1 "0 by default, will change cwd of nvim-tree to that of new buffer's when opening nvim-tree.
-let g:nvim_tree_create_in_closed_folder = 1 "0 by default, When creating files, sets the path of a file when cursor is on a closed folder to the parent folder when 0, and inside the folder when 1.
+let g:nvim_tree_create_in_closed_folder = 1 "0 by default, When creating files, sets the path of a file 
+"when cursor is on a closed folder to the parent folder when 0, and inside the folder when 1.
 let g:nvim_tree_special_files = { 'README.md': 1, 'Makefile': 1, 'MAKEFILE': 1 } " List of filenames that gets highlighted with NvimTreeSpecialFile
 let g:nvim_tree_show_icons = {
     \ 'git': 1,
@@ -190,41 +194,31 @@ let g:nvim_tree_show_icons = {
 " default will show icon by default if no icon is provided
 " default shows no icon by default
 let g:nvim_tree_icons = {
-    \ 'default': "",
-    \ 'symlink': "",
-    \ 'git': {
-    \   'unstaged': "✗",
-    \   'staged': "✓",
-    \   'unmerged': "",
-    \   'renamed': "➜",
-    \   'untracked': "★",
-    \   'deleted': "",
-    \   'ignored': "◌"
-    \   },
-    \ 'folder': {
-    \   'arrow_open': "",
-    \   'arrow_closed': "",
-    \   'default': "",
-    \   'open': "",
-    \   'empty': "",
-    \   'empty_open': "",
-    \   'symlink': "",
-    \   'symlink_open': "",
-    \   }
-    \ }
+   \ 'default': "",
+   \ 'symlink': "",
+   \ 'git': {
+   \   'unstaged': "✗",
+   \   'staged': "✓",
+   \   'unmerged': "",
+   \   'renamed': "➜",
+   \   'untracked': "★",
+   \   'deleted': "",
+   \   'ignored': "◌"
+   \   },
+   \ 'folder': {
+   \   'arrow_open': "",
+   \   'arrow_closed': "",
+   \   'default': "",
+   \   'open': "",
+   \   'empty': "",
+   \   'empty_open': "",
+   \   'symlink': "",
+   \   'symlink_open': "",
+   \   }
+   \ }
 
 nnoremap <C-n> :NvimTreeToggle<CR>
 nnoremap <leader>r :NvimTreeRefresh<CR>
 nnoremap <leader>n :NvimTreeFindFile<CR>
-" More available functions:
-" NvimTreeOpen
-" NvimTreeClose
-" NvimTreeFocus
-" NvimTreeFindFileToggle
-" NvimTreeResize
-" NvimTreeCollapse
-" NvimTreeCollapseKeepBuffers
 set termguicolors " this variable must be enabled for colors to be applied properly
-" a list of groups can be found at `:help nvim_tree_highlight`
-highlight NvimTreeFolderIcon guibg=none
 "-----------------------------------------------------------------------
