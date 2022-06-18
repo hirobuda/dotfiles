@@ -1,10 +1,14 @@
 -- insert mode remaps
-norm_table = {'(', ')', '[', ']', '\\part', '\\the', '\\alp', '\\bet', '\\fr', '\\sum', '^', '_', '\\pd', '\\lim'}
+norm_table = {'(', ')', '[', ']', '\\part', '\\the', '\\alp', '\\bet', '\\fr', '\\sum', '^', '_', '\\pd', '\\lim', '\\int'}
 math_table = {'\\left(', '\\right)', '\\left[', '\\right]', '\\partial', '\\theta'
-, '\\alpha', '\\beta', '\\frac{}{}', '\\sum_{}^{}', '^{}', '_{}', '\\frac{\\partial}{\\partial}', '\\lim_{\\to}'}
+, '\\alpha', '\\beta', '\\frac{}{}', '\\sum_{}^{}', '^{}', '_{}', '\\frac{\\partial}{\\partial}', '\\lim_{\\to}',
+'\\int_{}^{}'
+}
 keymap_table = {}
 
-for i=1,14 do
+n = #norm_table
+
+for i=1,n do
 	keymap_table[norm_table[i]] = math_table[i] 
 end
 
@@ -19,7 +23,7 @@ function isMath(k)
 	return k
 end
 
-for i = 1,14 do
+for i = 1,n do
 	vim.keymap.set('i', norm_table[i], function() return isMath(norm_table[i]) end, {buffer=true, expr=true})
 end
 
