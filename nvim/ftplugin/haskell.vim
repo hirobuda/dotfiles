@@ -1,6 +1,6 @@
 setlocal expandtab
-setlocal tabstop=8
-setlocal shiftwidth=8
+setlocal tabstop=4
+setlocal shiftwidth=4
 
 syn cluster hsRegions add=hsImport,hsLineComment,hsBlockComment,hsPragma
 syn cluster hsRegions add=cPreCondit,cCppOut,cCppOut2,cCppSkip

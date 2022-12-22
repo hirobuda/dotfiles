@@ -1,9 +1,25 @@
 -- insert mode remaps
-norm_table = {'(', ')', '[', ']', '\\part', '\\the', '\\alp', '\\bet', '\\fr', '\\sum', '^', '_', '\\pd', '\\lim', '\\int'}
-math_table = {'\\left(', '\\right)', '\\left[', '\\right]', '\\partial', '\\theta'
-, '\\alpha', '\\beta', '\\frac{}{}', '\\sum_{}^{}', '^{}', '_{}', '\\frac{\\partial}{\\partial}', '\\lim_{\\to}',
-'\\int_{}^{}'
-}
+norm_table = 
+	{'\\(', '\\)', 
+	'\\[', '\\]',
+	'\\part', '\\the', 
+	'\\alp', '\\bet', 
+	'\\fr', '\\sum', 
+	'^', '_', 
+	'\\pd', '\\lim', 
+	'\\int', '\\bmat', 
+	'\\inn'}
+math_table = 
+	{'\\left(', '\\right)', 
+	'\\left[', '\\right]', 
+	'\\partial', '\\theta', 
+	'\\alpha', '\\beta', '\\frac{}{}', 
+	'\\sum_{}^{}', 
+	'^{}', '_{}', 
+	'\\frac{\\partial}{\\partial}', '\\lim_{\\to}', 
+	'\\int_{}^{}', '\\begin{bmatrix}<Enter><Enter>\\end{bmatrix}', 
+	'\\langle , \\rangle'}
+
 keymap_table = {}
 
 n = #norm_table
@@ -29,4 +45,4 @@ end
 
 --normal mode remaps:
 
-vim.keymap.set('n', '<F2>', 'i$$<Enter>\\begin{aligned}<Enter><Enter>\\end{aligned}<Enter>$$', {buffer=true})
+vim.keymap.set('n', '<F2>', 'i$$\\begin{aligned}<Enter><Enter>\\end{aligned}$$', {buffer=true})
