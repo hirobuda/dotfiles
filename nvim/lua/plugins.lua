@@ -13,24 +13,26 @@ require('packer').startup(function()
         use 'ap/vim-css-color'
         use 'lervag/vimtex'
 	use {'kyazdani42/nvim-tree.lua',requires = {
-    		'kyazdani42/nvim-web-devicons', -- optional, for file icons}
-	    }}
---      use 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+		'kyazdani42/nvim-web-devicons', -- optional, for file icons}
+	}}
+      	use('nvim-treesitter/nvim-treesitter', {run = ':TSUpdate'})
         use {'rrethy/vim-hexokinase', run = 'make hexokinase'}
         use 'ixru/nvim-markdown'
 	use 'pappasam/coc-jedi'
-	use 'folke/tokyonight.nvim'	
+	use 'folke/tokyonight.nvim'
+	use 'JuliaEditorSupport/julia-vim'
+	use 'Julian/lean.nvim'
+	use 'nvim-lua/plenary.nvim'
 end)
 
 vim.cmd([[
-  augroup packer_user_config
-    autocmd!
-    autocmd BufWritePost plugins.lua source <afile> | PackerCompile
-  augroup end
+augroup packer_user_config
+autocmd!
+autocmd BufWritePost plugins.lua source <afile> | PackerCompile
+augroup end
 ]])
 
 require('plugins/markdown-preview')
 require('plugins/nvim-markdown')
 require('plugins/lualine')
 require('plugins/vimtex')
-require('plugins/lsp')
