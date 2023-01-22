@@ -1,0 +1,21 @@
+Config { overrideRedirect = False
+       , font             =  "xft:Mononoki:size=14,Migu 1C:size=11:antialias=true"
+       		    	    
+       , additionalFonts  = [ "xft:SauceCodePro Nerd Font Mono:style=Bold:pixelsize=17"
+       			    , "xft:SauceCodePro Nerd Font Mono:style=Bold:pixelsize=23:1"
+			    , "Migu 1C:size=10:antialias=true"
+			    ]
+       , bgColor  = "#3e4451"
+       , fgColor  = "#bbc2cf"
+       , position = TopW L 100
+       , commands = [ Run XPropertyLog "_XMONAD_LOG_0"
+       		    , Run MultiCpu ["-t", "<fc=#adf182><fn=2>\xf108</fn></fc> <total0>% <total1>% <total2>% <total3>%","-H","50","--high","red"] 20
+                    , Run Memory ["-t", "<fc=#916cad><fn=2>\xf233</fn></fc> <used>Mb"] 20
+                    , Run Com "echo" ["<fn=1>\xfb26</fn>"] "lambda" 3600
+		    , Run Com "/home/hiroshi/.config/xmobar/trayer-padding-icon.sh" [] "trayerpad" 10
+		    , Run Date "<fc=#ff8c28><fn=2>\xf017</fn></fc> %a %d/%m/%Y <fc=#f6c026>%H:%M</fc>" "date" 10
+                    ]
+       , sepChar  = "%"
+       , alignSep = "}{"
+       , template = " %lambda% %_XMONAD_LOG_0% }{ | %multicpu% | %memory% | %date% "
+       }
