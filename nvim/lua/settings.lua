@@ -5,9 +5,7 @@ local opt = vim.opt
 opt.termguicolors = true -- Enable colors in terminal
 opt.hlsearch = true --Set highlight on search
 
-
 -- tokyonight setup 
-
 require("tokyonight").setup({
   -- your configuration comes here
   -- or leave it empty to use the default settings
@@ -52,3 +50,16 @@ vim.cmd [[
         augroup END
 	set relativenumber
 ]]
+
+local rt = require("rust-tools")
+
+rt.setup({
+  server = {
+    on_attach = function(_, bufnr)
+      -- Hover actions
+      vim.keymap.set("n", "<C-space>", rt.hover_actions.hover_actions, { buffer = bufnr })
+      -- Code action groups
+      vim.keymap.set("n", "<Leader>a", rt.code_action_group.code_action_group, { buffer = bufnr })
+    end,
+  },
+})
