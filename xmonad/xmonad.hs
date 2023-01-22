@@ -2,7 +2,6 @@ import XMonad
 
 import Graphics.X11.ExtraTypes.XF86
 import XMonad.Util.EZConfig
-import XMonad.Util.Loggers
 import XMonad.Util.Ungrab
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.StatusBar
@@ -20,12 +19,12 @@ import qualified DBus.Client as D
 import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
 import qualified Codec.Binary.UTF8.String as UTF8
--- The preferred terminal program, which is used in a binding below and by
--- certain contrib modules.
---
-myTerminal      = "alacritty "
+import XMonad.Hooks.SetWMName
+
+myTerminal      = "alacritty"
 myEditor        = myTerminal ++ " -e nvim "
-myBrowser       = "firefox"
+myBrowser       = "brave"
+
 -- Whether focus follows the mouse pointer.
 myFocusFollowsMouse :: Bool
 myFocusFollowsMouse = True
@@ -67,18 +66,9 @@ myFocusedBorderColor = "#adf182"
 --
 myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 
-    -- launch a terminal
     [ ((modm .|. shiftMask, xK_Return), spawn $ XMonad.terminal conf)
-
-    , ((modm, xK_o), spawn "maimocr &")
-
-    -- , ("C-S-\\", spawn "dunstctl set-paused toggle")
-    -- volume ctl  
-    -- launch dmenu
-    , ((modm,               xK_p     ), spawn "dmenu_run")
-
-    -- launch gmrun
-    , ((modm .|. shiftMask, xK_p     ), spawn "gmrun")
+    , ((modm,               xK_f     ), spawn "nemo &")
+    , ((modm,               xK_p     ), spawn "dmenu_run -c -l 20")
 
     -- close focused window
     , ((modm .|. shiftMask, xK_c     ), kill)
@@ -128,36 +118,20 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     -- Deincrement the number of windows in the master area
     , ((modm              , xK_period), sendMessage (IncMasterN (-1)))
 
-    -- Toggle the status bar gap
-    -- Use this binding with avoidStruts from Hooks.ManageDocks.
-    -- See also the statusBar function from Hooks.DynamicLog.
-    --
-    -- , ((modm              , xK_b     ), sendMessage ToggleStruts)
-
     -- Quit xmonad
     , ((modm .|. shiftMask, xK_q     ), io (exitWith ExitSuccess))
 
     -- Restart xmonad
     , ((modm              , xK_q     ), spawn "xmonad --recompile; xmonad --restart")
 
-    -- Run xmessage with a summary of the default keybindings (useful for beginners)
-    --, ((modm .|. shiftMask, xK_slash ), spawn ("echo \"" ++ help ++ "\" | xmessage -file -"))
     ]
     ++
 
-    --
-    -- mod-[1..9], Switch to workspace N
-    -- mod-shift-[1..9], Move client to workspace N
-    --
     [((m .|. modm, k), windows $ f i)
         | (i, k) <- zip (XMonad.workspaces conf) [xK_1 .. xK_9]
         , (f, m) <- [(W.greedyView, 0), (W.shift, shiftMask)]]
     ++
 
-    --g
-    -- mod-{w,e,r}, Switch to physical/Xinerama screens 1, 2, or 3
-    -- mod-shift-{w,e,r}, Move client to screen 1, 2, or 3
-    --
     [((m .|. modm, key), screenWorkspace sc >>= flip whenJust (windows . f))
         | (key, sc) <- zip [xK_w, xK_e, xK_r] [0..]
         , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
@@ -207,53 +181,15 @@ myLayout = avoidStruts (tiled ||| Mirror tiled ||| Full)
      -- Percent of screen to increment by when resizing panes
      delta   = 3/100
 
-{-
-myLayout = tiled ||| Mirror tiled ||| Full ||| threeCol
-  where
-    threeCol = magnifiercz' 1.3 $ ThreeColMid nmaster delta ratio
-    tiled    = Tall nmaster delta ratio
-    nmaster  = 1      -- Default number of windows in the master pane
-    ratio    = 1/2    -- Default proportion of screen occupied by master pane
-    delta    = 3/100  -- Percent of screen to increment by when resizing panes
--}
-------------------------------------------------------------------------
--- Window rules:
-
--- Execute arbitrary actions and WindowSet manipulations when managing
--- a new window. You can use this to, for example, always float a
--- particular program, or have a client always appear on a particular
--- workspace.
---
--- To find the property name associated with a program, use
--- > xprop | grep WM_CLASS
--- and click on the client you're interested in.
---
--- To match on the WM_NAME, you can use 'title' in the same way that
--- 'className' and 'resource' are used below.
---
 myManageHook = composeAll
     [ className =? "MPlayer"        --> doFloat
     , className =? "Gimp"           --> doFloat
     , resource  =? "desktop_window" --> doIgnore
-    , resource  =? "kdesktop"       --> doIgnore ]
+    , resource  =? "kdesktop"       --> doIgnore 
+    , manageDocks]
 
-------------------------------------------------------------------------
--- Event handling
-
--- * EwmhDesktops users should change this to ewmhDesktopsEventHook
---
--- Defines a custom handler function for X Events. The function should
--- return (All True) if the default handler is to be run afterwards. To
--- combine event hooks use mappend or mconcat from Data.Monoid.
---
 myEventHook = mempty
 
-------------------------------------------------------------------------
--- Status bars and logging
-
--- Perform an arbitrary action on each internal state change or X event.
--- See the 'XMonad.Hooks.DynamicLog' extension for examples.
---
 --myLogHook h = dynamicLogWithPP $ def{ ppOutput = hPutStrLn h }
 -- COLORS
 green     = "#adf182"
@@ -263,39 +199,11 @@ red       = "#900000"
 blue      = "#2E9AFE"
 white     = "#eeeeee"
 
-
---myLogHook :: D.Client -> PP
---myLogHook dbus = def 
---        {ppOutput = dbusOutput dbus
---           , ppCurrent = wrap ("%{F" ++ green ++ "} ") " %{F-}"
---           , ppVisible = wrap ("%{F" ++ gray ++ "} ") " %{F-}"
---           , ppUrgent = wrap ("%{F" ++ red ++ "} ") " %{F-}"
---           , ppHidden = wrap ("%{F" ++ gray ++ "} ") " %{F-}"
---           , ppTitle = wrap ("%{F" ++ gray2 ++ "} ") " %{F-}"
---        }
--- Emit a DBus signal on log updates
---dbusOutput :: D.Client -> String -> IO ()
---dbusOutput dbus str = do
---    let signal = (D.signal objectPath interfaceName memberName) {
---            D.signalBody = [D.toVariant $ UTF8.decodeString str]
---        }
---    D.emit dbus signal
---  where
---    objectPath = D.objectPath_ "/org/xmonad/Log"
---   interfaceName = D.interfaceName_ "org.xmonad.Log"
---   memberName = D.memberName_ "Update"
-
 ------------------------------------------------------------------------
--- Startup hook
-
--- Perform an arbitrary action each time xmonad starts or is restarted
--- with mod-q.  Used by, e.g., XMonad.Layout.PerWorkspace to initialize
--- per-workspace layout choices.
---
--- By default, do nothing.
 myStartupHook = do
   spawn "killall trayer"
-  spawn ("sleep 2 && trayer --edge top --align right --widthtype request --padding 6 --SetDockType true --SetPartialStrut true --expand true --monitor 0 --transparent true --alpha 0 --tint 0x3e4451 --height 22")
+  spawn "sleep 2 && trayer --edge top --align right --widthtype request --padding 5 --SetDockType true --SetPartialStrut true --expand true --monitor 0 --transparent true --alpha 0 --tint 0x3e4451 --height 22"
+  spawn "sleep 2 && trayer --edge top --align right --widthtype request --padding 5 --SetDockType true --SetPartialStrut true --expand true --monitor 1 --transparent true --alpha 0 --tint 0x3e4451 --height 22"
   spawnOnce "nitrogen --restore &"
   spawnOnce "picom &"
   spawnOnce "xset r rate 300 50"
@@ -303,17 +211,9 @@ myStartupHook = do
   spawnOnce "sct 3000"
   spawnOnce "ibus-daemon -drxR &"
   spawnOnce "xfce4-clipman -d &"
-  spawnOnce "nm-applet -d &"
   spawnOnce "volumeicon"
+  setWMName "xmonad"
 ------------------------------------------------------------------------
--- Now run xmonad with all the defaults we set up.
--- Run xmonad with the settings you specify. No need to modify this.
-main :: IO ()
-main = xmonad
-     . ewmhFullscreen
-     . ewmh
-     . withEasySB (statusBarProp "xmobar" (pure myXmobarPP)) defToggleStrutsKey
-     $ myConfig 
 
 myXmobarPP :: PP
 myXmobarPP = def
@@ -332,7 +232,7 @@ myXmobarPP = def
     -- | Windows should have *some* title, which should not not exceed a
     -- sane length.
     ppWindow :: String -> String
-    ppWindow = xmobarRaw . (\w -> if null w then "untitled" else w) . shorten 30
+    ppWindow = xmobarRaw . (\w -> if null w then "untitled" else w) . shorten 45
 
     purple, green, orange, red, yellow, white :: String -> String
     purple = xmobarColor "#916cad" ""
@@ -342,6 +242,14 @@ myXmobarPP = def
     yellow = xmobarColor "#f9cc38" ""
     white  = xmobarColor "#bbc2cf" ""
 
+xmobar0      = statusBarPropTo "_XMONAD_LOG_0" "xmobar -x 0 ~/.config/xmobar/xmobarrc0"       (pure myXmobarPP)
+xmobar1      = statusBarPropTo "_XMONAD_LOG_1" "xmobar -x 1 ~/.config/xmobar/xmobarrc1"       (pure myXmobarPP)
+
+barSpawner :: ScreenId -> StatusBarConfig
+barSpawner 0 = xmobar0
+barSpawner 1 = xmobar1
+barSpawner _ = mempty
+------------------------------------------------------------------------------------------------------
 myConfig = def
      -- simple stuff
        {terminal           = myTerminal,
@@ -360,16 +268,15 @@ myConfig = def
       -- hooks, layouts
         layoutHook         = spacingRaw False (Border 0 10 0 10) True (Border 10 0 10 0) True $ myLayout,
         manageHook         = myManageHook,
-        --logHook            = dynamicLogWithPP (myLogHook dbus) {ppOrder = \(ws:_) -> [ws]},
- --       logHook = dynamicLogWithPP xmobarPP
- --                       { ppOutput = \x ->  hPutStrLn xmproc x   
- --                       , ppCurrent = wrap ("%{F" ++ green ++ "} ") " %{F-}"
- --                       , ppVisible = wrap ("%{F" ++ gray ++ "} ") " %{F-}"
- --                       , ppUrgent = wrap ("%{F" ++ red ++ "} ") " %{F-}"
- --                      , ppHidden = wrap ("%{F" ++ gray ++ "} ") " %{F-}"
- --                       , ppTitle = wrap ("%{F" ++ gray2 ++ "} ") " %{F-}"
- --                       },
-        
         handleEventHook    = myEventHook,
         startupHook        = myStartupHook
        }
+
+-- Now run xmonad with all the defaults we set up.
+-- Run xmonad with the settings you specify. No need to modify this.
+main :: IO ()
+main = xmonad
+     . ewmhFullscreen
+     . ewmh
+     . dynamicEasySBs (pure . barSpawner)
+     $ myConfig 
